@@ -56,6 +56,8 @@ namespace Server
             });
 
             services.AddTransient<AccountRepository>();
+            services.AddTransient<HeroesRepository>();
+            services.AddTransient<QuestsRepository>();
 
             // Configure JwtIssuerOptions
             services.Configure<JwtIssuerOptions>(Configuration.GetSection(nameof(JwtIssuerOptions)));
