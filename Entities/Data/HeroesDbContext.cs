@@ -29,5 +29,7 @@ namespace Entities.Data
         }
 
         public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<Hero> Heroes { get; set; }
+        public DbSet<Quest> Quests { get; set; }
     }
 }
