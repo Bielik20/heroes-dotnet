@@ -25,6 +25,11 @@ namespace DataAccessLayer.Repositories
             return await _context.Heroes.ToListAsync();
         }
 
+        public async Task<IEnumerable<Hero>> GetByName(string name)
+        {
+            return await _context.Heroes.Where(x => x.Name.Contains(name)).ToListAsync();
+        }
+
         public async Task<Hero> GetById(int id)
         {
             return await _context.Heroes.FirstOrDefaultAsync(x => x.Id == id);

@@ -25,6 +25,12 @@ namespace Server.Controllers
             return await _heroesRepository.GetAll();
         }
 
+        [HttpGet("getbyname/{name}")]
+        public async Task<IEnumerable<Hero>> Get(string name)
+        {
+            return await _heroesRepository.GetByName(name);
+        }
+
         // GET api/heroes/5
         [HttpGet("{id}", Name = "GetHero")]
         public async Task<IActionResult> Get(int id)
