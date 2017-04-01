@@ -19,5 +19,41 @@ namespace DataAccessLayer.Repositories
         {
             _context = context;
         }
+
+        public async Task<IEnumerable<Quest>> GetAll()
+        {
+            return await _context.Quests.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Quest>> GetOwnedByHero(int heroId)
+        {
+            return await _context.Quests.Where(x => x.HeroId == heroId).ToListAsync();
+        }
+
+        public async Task<Quest> GetById(int id)
+        {
+            return await _context.Quests.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Quest> Create(Quest model)
+        {
+            _context.Add(model);
+            await _context.SaveChangesAsync();
+            return model;
+        }
+
+        public async Task<Quest> Update(Quest model)
+        {
+            _context.Update(model);
+            await _context.SaveChangesAsync();
+            return model;
+        }
+
+        public async Task Delete(int id)
+        {
+            var model = await GetById(id);
+            _context.Remove(model);
+            await _context.SaveChangesAsync();
+        }
     }
 }
