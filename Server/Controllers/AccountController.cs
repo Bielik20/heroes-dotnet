@@ -22,7 +22,6 @@ namespace Server.Controllers
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly ILogger _logger;
         private readonly AccountRepository _accountRepository;
-        private readonly JsonSerializerSettings _serializerSettings;
 
         public AccountController(IOptionsSnapshot<JwtIssuerOptions> jwtOptions, 
             ILoggerFactory loggerFactory, 
@@ -33,11 +32,6 @@ namespace Server.Controllers
 
             _logger = loggerFactory.CreateLogger<AccountController>();
             _accountRepository = accountRepository;
-
-            _serializerSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            };
         }
 
         [HttpPost("login")]
@@ -57,9 +51,7 @@ namespace Server.Controllers
                     _logger.LogInformation($"Invalid username or password");
                     return BadRequest("Invalid credentials");
                 }
-
-                var json = GetToken(user);
-                return new OkObjectResult(json);
+                return new ObjectResult(await GetToken(user));
                 }
             catch(Exception e)
             {
@@ -84,8 +76,8 @@ namespace Server.Controllers
                     return BadRequest();
                 }
                 _logger.LogInformation($"User with Id = {user.Id} created account.");
-                var json = GetToken(user);
-                return new OkObjectResult(json);
+
+                return new ObjectResult(await GetToken(user));
             }
             catch (Exception e)
             {
@@ -119,7 +111,7 @@ namespace Server.Controllers
                                new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
                               .TotalSeconds);
 
-        private async Task<string> GetToken(ApplicationUser user)
+        private async Task<TokenResponseVM> GetToken(ApplicationUser user)
         {
             var claims = await GetClaims(user);
 
@@ -135,13 +127,14 @@ namespace Server.Controllers
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             // Serialize and return the response
-            var response = new
+            var tokenResponse = new TokenResponseVM
             {
-                access_token = encodedJwt,
-                expires_in = (int)_jwtOptions.ValidFor.TotalSeconds
+                AccessToken = encodedJwt,
+                ExpiresIn = (int)_jwtOptions.ValidFor.TotalSeconds
             };
 
-            return JsonConvert.SerializeObject(response, _serializerSettings);
+            return tokenResponse;
+            // return JsonConvert.SerializeObject(response, _serializerSettings);
         }
 
         private async Task<IEnumerable<Claim>> GetClaims(ApplicationUser user)
