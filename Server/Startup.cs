@@ -55,6 +55,7 @@ namespace Server
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            services.AddCors();
             services.AddTransient<AccountRepository>();
             services.AddTransient<HeroesRepository>();
             services.AddTransient<QuestsRepository>();
@@ -96,6 +97,8 @@ namespace Server
                 AutomaticChallenge = true,
                 TokenValidationParameters = tokenValidationParameters
             });
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
 
             app.UseMvc();
             SeedData.Initialize(context);

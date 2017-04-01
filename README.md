@@ -19,3 +19,18 @@ In Server directory
 ```
 dotnet run
 ```
+
+## Enable Cors
+
+For local hosts to work together there is need to enable Cors. First install [Chrome Extension](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi)
+
+In the Startup class:
+- ConfigureServices:
+```cs
+services.AddCors();
+```
+
+- Configure, before `app.UseMvc()`
+```cs
+app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+```
