@@ -25,7 +25,7 @@ For some reason there are still some bugs in CLI and this command doesn't work. 
 
 For local hosts to work together there is need to enable Cors. First install [Chrome Extension](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi)
 
-In the Startup class:
+### In the Startup class:
 - ConfigureServices:
 ```cs
 services.AddCors();
@@ -37,3 +37,8 @@ app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
 ```
 
 More information can be found in [documentation](https://docs.microsoft.com/en-us/aspnet/core/security/cors).
+
+### In Angular application to the headers of every message you need to add:
+```
+Allow-Control-Allow-Origin: *
+```
