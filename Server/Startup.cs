@@ -43,7 +43,7 @@ namespace Server
 
             // Add framework services.
             services.AddDbContext<HeroesDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), 
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
                     b => b.MigrationsAssembly("Entities")));
 
             // Add framework services.
