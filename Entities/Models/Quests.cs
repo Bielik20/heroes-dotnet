@@ -13,7 +13,7 @@ namespace Entities.Models
         public string Title { get; set; }
         public bool Completed { get; set; }
 
-        public int HeroId { get; set; }
+        public int? HeroId { get; set; }
         public virtual Hero Hero { get; set; }
     }
 }
