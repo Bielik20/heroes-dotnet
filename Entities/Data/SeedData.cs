@@ -17,7 +17,7 @@ namespace Entities.Data
         {
             context.Database.EnsureCreated();
 
-            if(context.Users.Any())
+            if (context.Users.Any())
             {
                 return;
             }

@@ -43,7 +43,7 @@ namespace Server
 
             // Add framework services.
             services.AddDbContext<HeroesDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("Entities")));
 
             // Add framework services.
@@ -98,7 +98,9 @@ namespace Server
                 TokenValidationParameters = tokenValidationParameters
             });
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
 
             app.UseMvc();
             SeedData.Initialize(context);
