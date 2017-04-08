@@ -42,9 +42,19 @@ namespace Server
             services.AddOptions();
 
             // Add framework services.
-            services.AddDbContext<HeroesDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), 
-                    b => b.MigrationsAssembly("Entities")));
+            services.AddDbContext<HeroesDbContext>(options => {
+                switch (Configuration.GetConnectionString("Current"))
+                {
+                    case "SqliteConnection":
+                        options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"), 
+                            b => b.MigrationsAssembly("Entities"));
+                        break;
+                    case "DefaultConnection":
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                            b => b.MigrationsAssembly("Entities"));
+                        break;
+                }
+            });
 
             // Add framework services.
             services.AddMvc(config =>
@@ -98,7 +108,9 @@ namespace Server
                 TokenValidationParameters = tokenValidationParameters
             });
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
 
             app.UseMvc();
             SeedData.Initialize(context);
